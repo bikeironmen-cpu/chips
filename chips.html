@@ -1,0 +1,582 @@
+<title>Crujiverde Chips</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+  /* Dirección: huerto cálido y artesanal — papel crema, tintas tierra (verde hoja,
+     camote, betabel, plátano) e ilustraciones SVG de cada verdura. Franjas full-width
+     con wrapper interior de 1060px, tarjetas orgánicas con sombra suave. */
+  :root {
+    --bg: #f5ecd8;
+    --surface: #fffdf5;
+    --surface-2: #efe2c6;
+    --fg: #2e2a1c;
+    --muted: #776d56;
+    --line: #e2d4b4;
+    --green: #4f7a35;
+    --green-deep: #3a5f26;
+    --camote: #c96a2b;
+    --betabel: #9b2d57;
+    --platano: #d8a62c;
+    --wa: #25d366;
+    --wa-ink: #0a3d23;
+    --shadow: 0 14px 34px rgba(74,56,24,.12);
+    --shadow-sm: 0 6px 16px rgba(74,56,24,.10);
+    --radius: 22px;
+    --display: "Fraunces", Georgia, "Times New Roman", serif;
+    --body: "Nunito Sans", system-ui, -apple-system, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #1a1610;
+      --surface: #241f16;
+      --surface-2: #2d2718;
+      --fg: #f3ecdb;
+      --muted: #a99d83;
+      --line: #39301f;
+      --green: #85b462;
+      --green-deep: #a4cd82;
+      --shadow: 0 14px 34px rgba(0,0,0,.5);
+      --shadow-sm: 0 6px 16px rgba(0,0,0,.4);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #1a1610;
+    --surface: #241f16;
+    --surface-2: #2d2718;
+    --fg: #f3ecdb;
+    --muted: #a99d83;
+    --line: #39301f;
+    --green: #85b462;
+    --green-deep: #a4cd82;
+    --shadow: 0 14px 34px rgba(0,0,0,.5);
+    --shadow-sm: 0 6px 16px rgba(0,0,0,.4);
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--body);
+    line-height: 1.65;
+    margin: 0;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3 { font-family: var(--display); line-height: 1.12; text-wrap: balance; margin: 0; font-weight: 600; }
+  p { margin: 0; }
+  a { color: inherit; }
+  .ic { display: block; width: 100%; height: 100%; }
+
+  .wrap {
+    max-width: 1060px;
+    margin-inline: auto;
+    padding-left: max(20px, env(safe-area-inset-left, 0px));
+    padding-right: max(20px, env(safe-area-inset-right, 0px));
+  }
+  .band { padding-block: clamp(54px, 8vw, 96px); }
+
+  .kicker {
+    display: inline-flex; align-items: center; gap: 8px; font-size: .76rem; font-weight: 800;
+    letter-spacing: .13em; text-transform: uppercase; color: var(--green-deep); margin-bottom: 14px;
+  }
+  .kicker::before { content: ""; width: 22px; height: 2px; background: var(--camote); border-radius: 2px; }
+  .sec-head { max-width: 50ch; margin-bottom: 40px; }
+  .sec-head h2 { font-size: clamp(1.9rem, 4.4vw, 2.8rem); }
+  .sec-head p { color: var(--muted); font-size: 1.08rem; margin-top: 12px; }
+
+  /* ---- Nav ---- */
+  .nav {
+    position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20;
+    background: color-mix(in srgb, var(--bg) 90%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+  body::before {
+    content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px);
+    z-index: 21; background: var(--bg);
+  }
+  .nav .wrap { display: flex; align-items: center; gap: 16px; padding-block: 13px; }
+  .brand { display: flex; align-items: center; gap: 11px; font-family: var(--display); font-weight: 700; font-size: 1.32rem; }
+  .brand .mark { width: 38px; height: 38px; flex: none; }
+  .brand b { color: var(--green-deep); }
+  .nav-links { margin-left: auto; display: flex; gap: 24px; align-items: center; }
+  .nav-links a { text-decoration: none; color: var(--muted); font-weight: 700; font-size: .93rem; }
+  .nav-links a:hover { color: var(--fg); }
+  @media (max-width: 760px) { .nav-links .hide-sm { display: none; } }
+
+  /* ---- Botones ---- */
+  .btn {
+    display: inline-flex; align-items: center; gap: 9px; justify-content: center;
+    font-family: var(--body); font-weight: 800; font-size: 1rem;
+    padding: 14px 26px; border-radius: 999px; text-decoration: none;
+    border: 2px solid transparent; cursor: pointer; transition: transform .14s ease, box-shadow .14s ease;
+  }
+  .btn:hover { transform: translateY(-2px); }
+  .btn-wa { background: var(--wa); color: var(--wa-ink); box-shadow: 0 10px 22px rgba(37,211,102,.34); }
+  .btn-ghost { background: transparent; color: var(--fg); border-color: var(--line); }
+  .btn-ghost:hover { border-color: var(--green); }
+  .btn svg { width: 20px; height: 20px; flex: none; }
+
+  /* ---- Hero ---- */
+  .hero { position: relative; overflow: hidden; }
+  .hero::after {
+    content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(42% 46% at 88% 18%, color-mix(in srgb, var(--platano) 30%, transparent), transparent 62%),
+      radial-gradient(40% 44% at 12% 90%, color-mix(in srgb, var(--green) 22%, transparent), transparent 64%);
+  }
+  .hero .wrap { position: relative; z-index: 1; }
+  .hero-grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: 44px; align-items: center; }
+  @media (max-width: 860px) { .hero-grid { grid-template-columns: 1fr; gap: 20px; } }
+  .badge {
+    display: inline-flex; align-items: center; gap: 9px; font-size: .86rem; font-weight: 800;
+    color: var(--green-deep); background: var(--surface); border: 1px solid var(--line);
+    padding: 8px 16px; border-radius: 999px; box-shadow: var(--shadow-sm);
+  }
+  .badge .seed { width: 18px; height: 18px; }
+  .hero h1 { font-size: clamp(2.5rem, 7vw, 4.1rem); margin: 20px 0 16px; letter-spacing: -.01em; }
+  .hero h1 em { font-style: italic; color: var(--camote); }
+  .hero .lead { font-size: 1.2rem; color: var(--muted); max-width: 40ch; }
+  .hero-cta { display: flex; flex-wrap: wrap; gap: 13px; margin-top: 28px; }
+  .hero-meta { display: flex; flex-wrap: wrap; gap: 16px 30px; margin-top: 32px; padding-top: 24px; border-top: 1px dashed var(--line); }
+  .hero-meta div { display: flex; flex-direction: column; }
+  .hero-meta b { font-family: var(--display); font-size: 1.55rem; font-weight: 700; color: var(--green-deep); }
+  .hero-meta span { font-size: .84rem; color: var(--muted); }
+
+  /* composición ilustrada */
+  .hero-art { position: relative; aspect-ratio: 1 / 1; max-width: 100%; }
+  .hero-art .plate {
+    position: absolute; inset: 8% ; border-radius: 50%;
+    background: radial-gradient(circle at 38% 32%, var(--surface), var(--surface-2));
+    box-shadow: var(--shadow); border: 1px solid var(--line);
+  }
+  .hero-art .v { position: absolute; filter: drop-shadow(0 8px 14px rgba(74,56,24,.18)); }
+  .hv1 { width: 40%; left: 30%; top: 8%; }
+  .hv2 { width: 34%; left: 6%;  top: 34%; }
+  .hv3 { width: 32%; left: 60%; top: 30%; }
+  .hv4 { width: 33%; left: 20%; top: 56%; }
+  .hv5 { width: 30%; left: 55%; top: 60%; }
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-art .v { animation: bob 6s ease-in-out infinite; }
+    .hv2 { animation-delay: -1.2s; } .hv3 { animation-delay: -2.4s; }
+    .hv4 { animation-delay: -3.1s; } .hv5 { animation-delay: -4.3s; }
+  }
+  @keyframes bob { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-9px) } }
+
+  /* ---- Tira de confianza ---- */
+  .trust { background: var(--green-deep); color: #f3f6ec; }
+  .trust .wrap { display: flex; flex-wrap: wrap; gap: 14px 40px; justify-content: center; padding-block: 22px; }
+  .trust span { display: inline-flex; align-items: center; gap: 9px; font-weight: 700; font-size: .98rem; }
+  .trust svg { width: 20px; height: 20px; opacity: .9; }
+
+  /* ---- Verduras ---- */
+  .veg-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 20px; }
+  .veg-card {
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 20px 18px 22px; box-shadow: var(--shadow-sm); text-align: center;
+    transition: transform .16s ease, box-shadow .16s ease;
+  }
+  .veg-card:hover { transform: translateY(-5px); box-shadow: var(--shadow); }
+  .veg-pic {
+    aspect-ratio: 1/1; border-radius: 16px; margin-bottom: 14px; display: grid; place-items: center;
+    background: var(--surface-2); padding: 14px;
+  }
+  .veg-pic svg { width: 100%; height: 100%; }
+  .veg-card h3 { font-size: 1.22rem; }
+  .veg-card span { font-size: .9rem; color: var(--muted); }
+  .veg-note { margin-top: 20px; font-size: .95rem; color: var(--muted); display: inline-flex; align-items: center; gap: 9px; }
+  .veg-note svg { width: 18px; height: 18px; flex: none; }
+
+  /* ---- Preparados ---- */
+  .prep-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 18px; }
+  .prep-card {
+    border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow-sm);
+    border: 1px solid var(--line); background: var(--surface);
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .prep-card .tag { width: 46px; height: 46px; border-radius: 13px; display: grid; place-items: center; margin-bottom: 8px; }
+  .prep-card h3 { font-size: 1.25rem; }
+  .prep-card p { font-size: .94rem; color: var(--muted); }
+  .t1 { background: color-mix(in srgb, var(--green) 24%, var(--surface)); }
+  .t2 { background: color-mix(in srgb, var(--platano) 30%, var(--surface)); }
+  .t3 { background: color-mix(in srgb, var(--camote) 26%, var(--surface)); }
+  .t4 { background: color-mix(in srgb, var(--betabel) 24%, var(--surface)); }
+
+  /* ---- Obleas ---- */
+  .obleas { background: var(--surface-2); }
+  .obl-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 18px; }
+  .obl-card {
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 18px 16px 20px; text-align: center; box-shadow: var(--shadow-sm);
+    transition: transform .16s ease;
+  }
+  .obl-card:hover { transform: translateY(-4px); }
+  .obl-pic { aspect-ratio: 5/4; display: grid; place-items: center; margin-bottom: 10px; }
+  .obl-pic svg { width: 86%; }
+  .obl-card .nm { font-family: var(--display); font-size: 1.12rem; font-weight: 600; }
+  .obl-card .ds { font-size: .84rem; color: var(--muted); }
+
+  /* ---- Cómo pedir ---- */
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; }
+  @media (max-width: 760px) { .steps { grid-template-columns: 1fr; gap: 24px; } }
+  .step {
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 26px 24px; box-shadow: var(--shadow-sm);
+  }
+  .step .num {
+    width: 50px; height: 50px; border-radius: 50%; display: grid; place-items: center; margin-bottom: 14px;
+    font-family: var(--display); font-weight: 700; font-size: 1.3rem; color: #fff; background: var(--green);
+  }
+  .step:nth-child(2) .num { background: var(--camote); }
+  .step:nth-child(3) .num { background: var(--betabel); }
+  .step h3 { font-size: 1.2rem; margin-bottom: 6px; }
+  .step p { color: var(--muted); font-size: .96rem; }
+
+  /* ---- Condiciones ---- */
+  .cond-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 640px) { .cond-grid { grid-template-columns: 1fr; } }
+  .cond-card {
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 30px; box-shadow: var(--shadow-sm);
+  }
+  .cond-card h3 { font-size: 1.22rem; margin-bottom: 10px; display: flex; align-items: center; gap: 11px; }
+  .cond-card h3 svg { width: 26px; height: 26px; flex: none; }
+  .cond-card .big { font-family: var(--display); font-weight: 700; font-size: 2.5rem; color: var(--green-deep); line-height: 1; margin-bottom: 10px; }
+  .cond-card p { color: var(--muted); font-size: .97rem; }
+  .zones { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+  .zone { background: var(--surface-2); border: 1px solid var(--line); border-radius: 999px; padding: 6px 14px; font-weight: 700; font-size: .87rem; }
+
+  /* ---- CTA ---- */
+  .cta-band { background: linear-gradient(140deg, var(--green), var(--green-deep)); color: #f4f7ec; text-align: center; position: relative; overflow: hidden; }
+  .cta-band .wrap { position: relative; z-index: 1; max-width: 660px; }
+  .cta-band h2 { font-size: clamp(2rem, 5vw, 3rem); }
+  .cta-band p { opacity: .95; font-size: 1.12rem; margin: 14px auto 28px; }
+  .cta-band .btn-wa { background: #fffdf5; color: var(--green-deep); }
+  .cta-leaves { position: absolute; inset: 0; opacity: .14; z-index: 0; }
+
+  /* ---- Footer ---- */
+  footer { background: var(--surface); border-top: 1px solid var(--line); }
+  .foot-grid { display: flex; flex-wrap: wrap; gap: 28px 56px; justify-content: space-between; }
+  footer h3 { font-family: var(--display); font-size: 1.28rem; font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
+  footer h3 .mark { width: 30px; height: 30px; }
+  footer p, footer a { color: var(--muted); text-decoration: none; font-size: .95rem; }
+  footer a:hover { color: var(--fg); }
+  .foot-col { display: grid; gap: 7px; align-content: start; max-width: 34ch; }
+  .foot-contact { font-weight: 800; color: var(--fg); font-size: 1.06rem; }
+  .copy { margin-top: 34px; padding-top: 22px; border-top: 1px solid var(--line); color: var(--muted); font-size: .85rem; }
+
+  /* ---- FAB ---- */
+  .fab {
+    position: fixed; z-index: 40;
+    right: max(18px, env(safe-area-inset-right, 0px));
+    bottom: max(18px, env(safe-area-inset-bottom, 0px));
+    width: 60px; height: 60px; border-radius: 50%;
+    background: var(--wa); display: grid; place-items: center;
+    box-shadow: 0 10px 26px rgba(37,211,102,.5); color: var(--wa-ink); text-decoration: none;
+    transition: transform .15s ease;
+  }
+  .fab:hover { transform: scale(1.07); }
+  .fab svg { width: 31px; height: 31px; }
+
+  .theme-btn { background: transparent; border: 1px solid var(--line); color: var(--fg); border-radius: 999px; width: 38px; height: 38px; cursor: pointer; font-size: 1rem; display: grid; place-items: center; }
+  .theme-btn:hover { border-color: var(--green); }
+
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,600&family=Nunito+Sans:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap">
+
+<!-- Biblioteca de ilustraciones SVG (verduras, obleas, iconos) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="wa" viewBox="0 0 24 24">
+    <path fill="currentColor" d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.96-.94 1.16-.17.2-.35.22-.64.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.76-1.66-2.06-.17-.3-.02-.46.13-.6.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51l-.57-.01c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.22 3.08c.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.69.63.71.22 1.36.19 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.7.25-1.29.17-1.42-.07-.13-.27-.2-.57-.35M12.04 21.5h-.01a9.5 9.5 0 0 1-4.83-1.32l-.35-.21-3.59.94.96-3.5-.23-.36a9.47 9.47 0 0 1-1.45-5.05c0-5.24 4.27-9.5 9.52-9.5 2.54 0 4.93.99 6.72 2.79a9.43 9.43 0 0 1 2.79 6.72c0 5.24-4.27 9.5-9.52 9.5m8.1-17.6A11.4 11.4 0 0 0 12.04 0C5.73 0 .6 5.12.6 11.42c0 2.01.53 3.98 1.53 5.71L.5 24l6.03-1.58a11.4 11.4 0 0 0 5.5 1.4h.01c6.31 0 11.44-5.12 11.44-11.42 0-3.05-1.19-5.92-3.35-8.08"/>
+  </symbol>
+
+  <symbol id="leaf" viewBox="0 0 24 24">
+    <path fill="currentColor" d="M5 21c0-7 4-13 15-15-2 9-7 13-13 14l-1 1H5v-1c2-3 5-5 9-7-5 1-8 4-9 7Z"/>
+  </symbol>
+  <symbol id="check" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M4 12.5 9.5 18 20 6"/></symbol>
+  <symbol id="box" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round" d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5zM3 7.5 12 12l9-4.5M12 12v9"/></symbol>
+  <symbol id="truck" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round" d="M2 6h11v9H2zM13 9h4l3 3v3h-7zM6.5 18.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Zm11 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z"/></symbol>
+  <symbol id="mark" viewBox="0 0 40 40">
+    <circle cx="20" cy="20" r="20" fill="#4f7a35"/>
+    <path fill="#bcd99a" d="M9 29c0-9 5-16 20-18-3 11-9 16-16 17l-1 2H9z"/>
+    <path fill="#eef6df" d="M11 29c2-4 6-7 11-9-6 1-10 5-11 9Z"/>
+  </symbol>
+
+  <!-- Betabel -->
+  <symbol id="v-betabel" viewBox="0 0 100 100">
+    <g stroke="#3a5f26" stroke-width="2.4" fill="none" stroke-linecap="round"><path d="M50 46 36 16"/><path d="M50 46 50 11"/><path d="M50 46 64 16"/></g>
+    <g fill="#5a8a3c"><path d="M50 44C44 30 40 22 32 16c8 4 15 14 18 28Z"/><path d="M50 44C50 28 50 20 50 12c3 10 3 22 0 32Z"/><path d="M50 44C56 30 60 22 68 16c-8 4-15 14-18 28Z"/></g>
+    <path d="M50 40c16 0 26 14 22 30-3 12-12 20-22 20s-19-8-22-20c-4-16 6-30 22-30Z" fill="#9b2d57"/>
+    <path d="M50 90c0 3-1 5 0 7 1-2 0-4 0-7Z" fill="#6f1f3f"/>
+    <ellipse cx="41" cy="58" rx="6" ry="10" fill="#c14c78" opacity=".55"/>
+  </symbol>
+
+  <!-- Camote -->
+  <symbol id="v-camote" viewBox="0 0 100 100">
+    <path d="M20 68C16 56 26 42 44 32 62 22 80 24 84 36c4 12-8 28-26 38-18 9-34 6-38-6Z" fill="#c96a2b"/>
+    <path d="M38 48c10-6 24-8 34-3" stroke="#a9541d" stroke-width="2.6" fill="none" opacity=".5" stroke-linecap="round"/>
+    <ellipse cx="55" cy="52" rx="9" ry="4" fill="#e18b4d" opacity=".55" transform="rotate(-24 55 52)"/>
+    <path d="M84 36c5-3 9-2 12 1" stroke="#a9541d" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+  </symbol>
+
+  <!-- Jícama -->
+  <symbol id="v-jicama" viewBox="0 0 100 100">
+    <path d="M50 30c20 0 33 15 33 33 0 18-14 28-33 28S17 81 17 63c0-18 13-33 33-33Z" fill="#e8dcbf"/>
+    <g stroke="#cdbb90" stroke-width="2.2" fill="none" opacity=".7" stroke-linecap="round"><path d="M38 34c-5 20-5 38 3 55"/><path d="M62 34c5 20 5 38-3 55"/><path d="M50 31v60"/></g>
+    <path d="M45 31c2-9 8-9 10 0Z" fill="#7aa23f"/>
+  </symbol>
+
+  <!-- Pepino -->
+  <symbol id="v-pepino" viewBox="0 0 100 100">
+    <path d="M24 76C15 67 19 50 34 39 51 27 68 23 77 32c9 9 4 27-12 38-16 11-32 15-41 6Z" fill="#4f8a3a"/>
+    <path d="M31 72C24 59 30 46 44 37" stroke="#75b052" stroke-width="3.2" fill="none" opacity=".6" stroke-linecap="round"/>
+    <g fill="#c6e0a2"><circle cx="41" cy="61" r="2.2"/><circle cx="49" cy="52" r="2.2"/><circle cx="58" cy="44" r="2.2"/></g>
+  </symbol>
+
+  <!-- Plátano -->
+  <symbol id="v-platano" viewBox="0 0 100 100">
+    <path d="M24 28c4 26 20 48 50 51 6 0 10-5 7-9-24-2-38-18-42-40-1-5-14-6-15-2Z" fill="#e3bb3a"/>
+    <path d="M30 33c6 22 20 37 44 41" stroke="#c6971f" stroke-width="2.2" fill="none" opacity=".5" stroke-linecap="round"/>
+    <path d="M24 28c-2-4 0-8 4-8 0 4-1 7 0 9Z" fill="#7a5a1a"/>
+    <path d="M74 79c5 1 7 5 5 9-3-1-5-5-5-9Z" fill="#6e5518"/>
+  </symbol>
+
+  <!-- Papa -->
+  <symbol id="v-papa" viewBox="0 0 100 100">
+    <path d="M27 55C23 40 36 30 53 30c18 0 31 11 29 28-2 17-15 28-32 28-15 0-20-16-23-31Z" fill="#c69a63"/>
+    <ellipse cx="50" cy="45" rx="12" ry="6" fill="#dab88a" opacity=".55"/>
+    <g fill="#9a7442"><circle cx="44" cy="49" r="2.4"/><circle cx="63" cy="45" r="2"/><circle cx="59" cy="65" r="2.4"/><circle cx="40" cy="65" r="1.8"/></g>
+  </symbol>
+
+  <!-- Oblea -->
+  <symbol id="v-oblea" viewBox="0 0 100 100">
+    <ellipse cx="50" cy="62" rx="38" ry="12" fill="#d7ba82"/>
+    <ellipse cx="50" cy="52" rx="38" ry="12" fill="#f1e3bd"/>
+    <ellipse cx="50" cy="52" rx="30" ry="8" fill="#e6d2a0" opacity=".7"/>
+    <g fill="#d2b273" opacity=".8"><circle cx="38" cy="52" r="2"/><circle cx="50" cy="49" r="2"/><circle cx="62" cy="52" r="2"/><circle cx="44" cy="55" r="1.6"/><circle cx="56" cy="55" r="1.6"/></g>
+  </symbol>
+</svg>
+
+<nav class="nav">
+  <div class="wrap">
+    <div class="brand"><svg class="mark"><use href="#mark"></use></svg> Cruji<b>verde</b></div>
+    <div class="nav-links">
+      <a href="#sabores" class="hide-sm">Chips</a>
+      <a href="#obleas" class="hide-sm">Obleas</a>
+      <a href="#pedir" class="hide-sm">Cómo pedir</a>
+      <button class="theme-btn" id="theme" aria-label="Cambiar tema">🌙</button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero band">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="badge"><svg class="seed" style="color:var(--green)"><use href="#leaf"></use></svg> 100% naturales</span>
+      <h1>Botana de verdura, <em>de la tierra a tu mesa</em></h1>
+      <p class="lead">Betabel, camote, jícama, pepino, plátano y papa. Sin conservadores ni colorantes: solo verdura, hecha crujiente.</p>
+      <div class="hero-cta">
+        <a class="btn btn-wa" data-wa href="#"><svg><use href="#wa"></use></svg> Pedir por WhatsApp</a>
+        <a class="btn btn-ghost" href="#sabores">Ver productos</a>
+      </div>
+      <div class="hero-meta">
+        <div><b>100%</b><span>naturales</span></div>
+        <div><b>80 g</b><span>por presentación</span></div>
+        <div><b>6</b><span>verduras + obleas</span></div>
+      </div>
+    </div>
+    <div class="hero-art" aria-hidden="true">
+      <div class="plate"></div>
+      <div class="v hv1"><svg class="ic"><use href="#v-betabel"></use></svg></div>
+      <div class="v hv2"><svg class="ic"><use href="#v-camote"></use></svg></div>
+      <div class="v hv3"><svg class="ic"><use href="#v-platano"></use></svg></div>
+      <div class="v hv4"><svg class="ic"><use href="#v-pepino"></use></svg></div>
+      <div class="v hv5"><svg class="ic"><use href="#v-papa"></use></svg></div>
+    </div>
+  </div>
+</section>
+
+<!-- TIRA DE CONFIANZA -->
+<section class="trust">
+  <div class="wrap">
+    <span><svg><use href="#leaf"></use></svg> 100% naturales</span>
+    <span><svg><use href="#box"></use></svg> Presentación de 80 g</span>
+    <span><svg><use href="#check"></use></svg> Sin conservadores</span>
+    <span><svg><use href="#truck"></use></svg> Hecho en Guadalajara</span>
+  </div>
+</section>
+
+<!-- CHIPS / VERDURAS -->
+<section class="band" id="sabores">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">Chips de verdura</span>
+      <h2>Seis verduras, un antojo natural</h2>
+      <p>Se venden en mix combinado y también por separado. Presentación de 80 g. Pregunta por nuestras variedades por WhatsApp.</p>
+    </div>
+    <div class="veg-grid">
+      <div class="veg-card"><div class="veg-pic"><svg><use href="#v-betabel"></use></svg></div><h3>Betabel</h3><span>Dulce y terroso</span></div>
+      <div class="veg-card"><div class="veg-pic"><svg><use href="#v-camote"></use></svg></div><h3>Camote</h3><span>Dulce y dorado</span></div>
+      <div class="veg-card"><div class="veg-pic"><svg><use href="#v-jicama"></use></svg></div><h3>Jícama</h3><span>Fresca y ligera</span></div>
+      <div class="veg-card"><div class="veg-pic"><svg><use href="#v-pepino"></use></svg></div><h3>Pepino</h3><span>Crujiente y fresco</span></div>
+      <div class="veg-card"><div class="veg-pic"><svg><use href="#v-platano"></use></svg></div><h3>Plátano</h3><span>Clásico y dulce</span></div>
+      <div class="veg-card"><div class="veg-pic"><svg><use href="#v-papa"></use></svg></div><h3>Papa</h3><span>La de siempre</span></div>
+    </div>
+    <p class="veg-note"><svg style="color:var(--green)"><use href="#leaf"></use></svg> Presentación de 80 g · 100% naturales, sin conservadores.</p>
+  </div>
+</section>
+
+<!-- PREPARADOS -->
+<section class="band" id="preparados">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">A tu gusto</span>
+      <h2>Elige tu preparado</h2>
+      <p>Mismas verduras, distintas personalidades. Combínalas como más te late.</p>
+    </div>
+    <div class="prep-grid">
+      <div class="prep-card"><div class="tag t1"><svg style="width:24px;height:24px;color:var(--green-deep)"><use href="#leaf"></use></svg></div><h3>Natural</h3><p>Sin nada extra, puro sabor de la verdura.</p></div>
+      <div class="prep-card"><div class="tag t2"><svg style="width:24px;height:24px;color:var(--camote)"><use href="#check"></use></svg></div><h3>Sal y limón</h3><p>El clásico que nunca falla, bien chispado.</p></div>
+      <div class="prep-card"><div class="tag t3"><svg style="width:24px;height:24px;color:#8a3a12"><use href="#check"></use></svg></div><h3>Salsas negras</h3><p>Intenso, umami y con su buena patada.</p></div>
+      <div class="prep-card"><div class="tag t4"><svg style="width:24px;height:24px;color:var(--betabel)"><use href="#leaf"></use></svg></div><h3>Y más</h3><p>Enchilados, dulces y ediciones de temporada. Pregunta por WhatsApp.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- OBLEAS -->
+<section class="band obleas" id="obleas">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">También tenemos</span>
+      <h2>Obleas artesanales</h2>
+      <p>Dulces tradicionales para acompañar. Sabores de pistache, cajeta, coco, nuez, mazapán y más.</p>
+    </div>
+    <div class="obl-grid">
+      <div class="obl-card"><div class="obl-pic"><svg><use href="#v-oblea"></use></svg></div><div class="nm">Pistache</div><div class="ds">Cremosa y tostada</div></div>
+      <div class="obl-card"><div class="obl-pic"><svg><use href="#v-oblea"></use></svg></div><div class="nm">Cajeta</div><div class="ds">Dulce clásico</div></div>
+      <div class="obl-card"><div class="obl-pic"><svg><use href="#v-oblea"></use></svg></div><div class="nm">Coco</div><div class="ds">Suave y tropical</div></div>
+      <div class="obl-card"><div class="obl-pic"><svg><use href="#v-oblea"></use></svg></div><div class="nm">Nuez</div><div class="ds">Con textura</div></div>
+      <div class="obl-card"><div class="obl-pic"><svg><use href="#v-oblea"></use></svg></div><div class="nm">Mazapán</div><div class="ds">De cacahuate</div></div>
+      <div class="obl-card"><div class="obl-pic"><svg><use href="#v-oblea"></use></svg></div><div class="nm">Y más</div><div class="ds">Pregunta por WhatsApp</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CÓMO PEDIR -->
+<section class="band" id="pedir">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">Fácil y rápido</span>
+      <h2>Cómo pedir en 3 pasos</h2>
+      <p>Tomamos pedidos únicamente por WhatsApp.</p>
+    </div>
+    <div class="steps">
+      <div class="step"><div class="num">1</div><h3>Elige</h3><p>Arma tu mix de chips y obleas, y decide tus preparados favoritos.</p></div>
+      <div class="step"><div class="num">2</div><h3>Escribe por WhatsApp</h3><p>Mándanos tu pedido al 33 2620 5372 y te confirmamos precio y disponibilidad.</p></div>
+      <div class="step"><div class="num">3</div><h3>Recibe</h3><p>Entregamos en el Área Metropolitana de Guadalajara. ¡A disfrutar!</p></div>
+    </div>
+    <div style="margin-top:36px">
+      <a class="btn btn-wa" data-wa href="#"><svg><use href="#wa"></use></svg> Empezar mi pedido</a>
+    </div>
+  </div>
+</section>
+
+<!-- CONDICIONES -->
+<section class="band" style="background:var(--surface-2)">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker">Antes de pedir</span>
+      <h2>Condiciones de pedido</h2>
+    </div>
+    <div class="cond-grid">
+      <div class="cond-card">
+        <h3><svg style="color:var(--green)"><use href="#box"></use></svg> Pedido mínimo</h3>
+        <div class="big">$2,500 MXN</div>
+        <p>Monto mínimo por pedido. Combina chips, obleas y preparados para llegar al mínimo.</p>
+      </div>
+      <div class="cond-card">
+        <h3><svg style="color:var(--camote)"><use href="#truck"></use></svg> Zona de entrega</h3>
+        <p>Entregamos únicamente en el Área Metropolitana de Guadalajara:</p>
+        <div class="zones">
+          <span class="zone">Guadalajara</span>
+          <span class="zone">Zapopan</span>
+          <span class="zone">Tlaquepaque</span>
+          <span class="zone">Tonalá</span>
+          <span class="zone">Tlajomulco</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="band cta-band">
+  <svg class="cta-leaves" viewBox="0 0 200 60" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <g fill="#ffffff"><use href="#leaf" x="10" y="8" width="24" height="24"/><use href="#leaf" x="60" y="26" width="20" height="20"/><use href="#leaf" x="120" y="6" width="26" height="26"/><use href="#leaf" x="165" y="30" width="22" height="22"/></g>
+  </svg>
+  <div class="wrap">
+    <h2>¿Se te antojó?</h2>
+    <p>Arma tu caja de chips naturales y obleas. Pedido mínimo $2,500 — entregas en el AMG.</p>
+    <a class="btn btn-wa" data-wa href="#"><svg><use href="#wa"></use></svg> Pedir por WhatsApp</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="band">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-col">
+        <h3><svg class="mark"><use href="#mark"></use></svg> Cruji<span style="color:var(--green-deep)">verde</span></h3>
+        <p>Chips de verduras 100% naturales (80 g) y obleas artesanales, hechos con cariño en Guadalajara.</p>
+      </div>
+      <div class="foot-col">
+        <p style="font-weight:800;color:var(--fg)">Pedidos</p>
+        <p class="foot-contact">WhatsApp 33 2620 5372</p>
+        <a data-wa href="#">Abrir chat de WhatsApp →</a>
+        <p>Pedido mínimo $2,500 MXN</p>
+      </div>
+      <div class="foot-col">
+        <p style="font-weight:800;color:var(--fg)">Entregas</p>
+        <p>Área Metropolitana de Guadalajara: Guadalajara, Zapopan, Tlaquepaque, Tonalá y Tlajomulco.</p>
+      </div>
+    </div>
+    <div class="copy">© <span id="year"></span> Crujiverde · Nombre de marca de ejemplo, edítalo a tu gusto. Pedidos solo por WhatsApp.</div>
+  </div>
+</footer>
+
+<a class="fab" data-wa href="#" aria-label="Pedir por WhatsApp"><svg><use href="#wa"></use></svg></a>
+
+<script>
+  var WA_NUMERO = "523326205372"; // 52 (México) + 33 2620 5372
+  var MENSAJE = "Hola, quiero hacer un pedido de chips de verduras 🥬";
+  var url = "https://wa.me/" + WA_NUMERO + "?text=" + encodeURIComponent(MENSAJE);
+  document.querySelectorAll("[data-wa]").forEach(function (a) {
+    a.setAttribute("href", url);
+    a.setAttribute("target", "_blank");
+    a.setAttribute("rel", "noopener");
+  });
+
+  try { document.getElementById("year").textContent = new Date().getFullYear(); } catch (e) {}
+
+  (function () {
+    var btn = document.getElementById("theme");
+    var root = document.documentElement;
+    function isDark() {
+      return root.getAttribute("data-theme") === "dark" ||
+        (!root.hasAttribute("data-theme") && window.matchMedia("(prefers-color-scheme: dark)").matches);
+    }
+    function sync() { btn.textContent = isDark() ? "☀️" : "🌙"; }
+    try { var saved = localStorage.getItem("cv-theme"); if (saved) root.setAttribute("data-theme", saved); } catch (e) {}
+    sync();
+    btn.addEventListener("click", function () {
+      var next = isDark() ? "light" : "dark";
+      root.setAttribute("data-theme", next);
+      try { localStorage.setItem("cv-theme", next); } catch (e) {}
+      sync();
+    });
+  })();
+</script>
